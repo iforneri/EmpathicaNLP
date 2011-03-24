@@ -67,10 +67,10 @@ class PartOfSpeechHandler(tornado.web.RequestHandler):
 class ConceptHandler(tornado.web.RequestHandler):
     def post(self):
         logging.info(self.get_argument('input'))
-        tags = self.get_argument('input')
+        input = self.get_argument('input')
         logging.info('CONCEPT: Got %s as input', input)
-        #tokens = nltk.word_tokenize(input)
-        #tags = nltk.pos_tag(tokens)
+        tokens = nltk.word_tokenize(input)
+        tags = nltk.pos_tag(tokens)
         tagged_input = []
         for(token, tag) in tags:
                 if(is_name(token)):
