@@ -19,7 +19,7 @@ class NaturalLanguageNetwork:
     def __init__(self,file):
         self.file = file
         self.ios = 30
-        self.hns = 28
+        self.hns = 25
         self.epochs = 300
         self.ds = SupervisedDataSet(self.ios,self.ios)
         self.nn = None
@@ -56,7 +56,7 @@ class NaturalLanguageNetwork:
             ins, outs = self.convert_to_tuple(learn_lines[i],learn_lines[i+1])
             i += 2
             self.ds.addSample(ins,outs)
-        self.nn = buildNetwork(self.ios,self.hns,self.ios,outclass=SoftmaxLayer)
+        self.nn = buildNetwork(self.ios,self.hns,self.ios)
         self.train_dat, self.test_dat = self.ds.splitWithProportion(0.75)
         trnr = BackpropTrainer(self.nn,dataset=self.train_dat,momentum=0.1,verbose=False,weightdecay=0.01)
         i = 150
