@@ -57,7 +57,8 @@ class NaturalLanguageNetwork:
                 res_str  = ''
                 for c in cur_str:
                     res_str += c + ' '
-                ret.append(res_str.strip())
+                if res_str != '':
+                    ret.append(res_str.strip())
                 cur_str = []
         return ret       
     
