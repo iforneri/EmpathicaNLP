@@ -61,12 +61,32 @@ class PartOfSpeechHandler(tornado.web.RequestHandler):
                         tagged_input.append((token, tag))
         self.write(tornado.escape.json_encode(tagged_input))
 
+class ConceptHandler(tornado.web.RequestHandler):
+    def get(self):
+        logging.info(self.get_argument('input'))
+        input = self.get_argument('input')
+        logging.info('CONCEPT: Got %s as input', input)
+        tokens = nltk.word_tokenize(input)
+        tags = nltk.pos_tag(tokens)
+        tagged_input = []
+        for(token, tag) in tags:
+                if(is_name(token)):
+                        tagged_input.append((token, 'NAME'))
+                else:
+                        tagged_input.append((token, tag))
+        concepts = nln.get_concepts(tagged_input)
+        self.write(tornado.escape.json_encode(concepts))
+        
+        
 def main():
     tornado.options.parse_command_line()
     tornado.options.parse_command_line()
+    nln = NaturalLanguageNetwork(r'./tr_res.txt')
+    nln.parse_and_train()
     application = tornado.web.Application([
         (r"/is_name", IsNameHandler),
         (r"/postag", PartOfSpeechHandler),
+        (r"/concepts", ConceptHander),
     ])
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(options.port)

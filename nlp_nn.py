@@ -2,7 +2,7 @@ from pybrain.datasets import SupervisedDataSet
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.supervised.trainers import BackpropTrainer
 from pybrain.utilities import percentError
-from pybrain.structure.modules import LinearLayer
+from pybrain.structure.modules import SoftmaxLayer
 
 
 pos_tags = ['$', '\'\'', '(', ')', ',', '--', '.', ':', 'CC', 'CD', 'DT', 'EX', 'FW', 'IN', 'JJ', 'JJR', 'JJS', 'LS', 'MD', 'NN',
@@ -56,7 +56,7 @@ class NaturalLanguageNetwork:
             ins, outs = self.convert_to_tuple(learn_lines[i],learn_lines[i+1])
             i += 2
             self.ds.addSample(ins,outs)
-        self.nn = buildNetwork(self.ios,self.hns,self.ios)
+        self.nn = buildNetwork(self.ios,self.hns,self.ios,outclass=SoftmaxLayer)
         self.train_dat, self.test_dat = self.ds.splitWithProportion(0.75)
         trnr = BackpropTrainer(self.nn,dataset=self.train_dat,momentum=0.1,verbose=False,weightdecay=0.01)
         i = 150
