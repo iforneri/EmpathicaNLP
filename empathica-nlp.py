@@ -28,6 +28,8 @@ from tornado.options import define, options
 
 define("port", default=8000, help="run on the given port", type=int)
 
+nln = NaturalLanguageNetwork(r'./tr_res.txt')
+
 def is_name(word):
         for fileid in names.fileids():
                 for name in names.words(fileid):
@@ -82,12 +84,11 @@ class ConceptHandler(tornado.web.RequestHandler):
 def main():
     tornado.options.parse_command_line()
     tornado.options.parse_command_line()
-    nln = NaturalLanguageNetwork(r'./tr_res.txt')
     nln.parse_and_train()
     application = tornado.web.Application([
         (r"/is_name", IsNameHandler),
         (r"/postag", PartOfSpeechHandler),
-        (r"/concepts", ConceptHander),
+        (r"/concepts", ConceptHandler),
     ])
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(options.port)
