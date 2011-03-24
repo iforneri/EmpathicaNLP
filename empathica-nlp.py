@@ -20,6 +20,7 @@ import tornado.options
 import tornado.web
 import logging
 import nltk
+import urllib
 from nltk.corpus import names
 from nltk.corpus import wordnet
 from nlp_nn import NaturalLanguageNetwork
@@ -39,7 +40,7 @@ def is_name(word):
 
 class IsNameHandler(tornado.web.RequestHandler):
     def post(self):
-        word = self.get_argument('word')
+        word = urllib.unquote(self.get_argument('word'))
         logging.info('IS_NAME: Got %s as input', word)
         result = is_name(word)
 
@@ -52,7 +53,7 @@ class IsNameHandler(tornado.web.RequestHandler):
 class PartOfSpeechHandler(tornado.web.RequestHandler):
     def post(self):
         logging.info(self.get_argument('input'))
-        input = self.get_argument('input')
+        input = urllib.unquote(self.get_argument('input'))
         logging.info('TOKENIZE: Got %s as input', input)
         tokens = nltk.word_tokenize(input)
         tags = nltk.pos_tag(tokens)
@@ -67,7 +68,7 @@ class PartOfSpeechHandler(tornado.web.RequestHandler):
 class ConceptHandler(tornado.web.RequestHandler):
     def post(self):
         logging.info(self.get_argument('input'))
-        input = self.get_argument('input')
+        input = urllib.unquote(self.get_argument('input'))
         logging.info('CONCEPT: Got %s as input', input)
         tokens = nltk.word_tokenize(input)
         tags = nltk.pos_tag(tokens)
