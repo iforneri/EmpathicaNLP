@@ -23,6 +23,12 @@ class NaturalLanguageNetwork:
         self.epochs = 300
         self.ds = SupervisedDataSet(self.ios,self.ios)
         self.nn = None
+        self.omitlist = []
+        self.omitlist.append('.')
+        self.omitlist.append('?')
+        self.edgeomitlist = []
+        self.edgeomitlist.append('and')
+        self.edgeomitlist.append('of')
     
     def get_concepts(self,inp_pos):
         inp = []
@@ -32,16 +38,26 @@ class NaturalLanguageNetwork:
         inp = self.pad(inp,self.ios,-1)
         res = self.nn.activate(inp)
         print res
-        cur_str = ''
+        cur_str = []
         for i in range(len(res)):
             if round(res[i]) == 1:
                 print 'Matched a node'
                 if i < len(inp_pos):
-                    print 'Appending ' + str(inp_pos[i][0])
-                    cur_str += inp_pos[i][0] + ' '
-            elif cur_str != '':
-                ret.append(cur_str.strip())
-                cur_str = ''
+                    if inp_pos[i][0].lower() not in self.omitlist:
+                        print 'Appending ' + str(inp_pos[i][0])
+                        cur_str.append(inp_pos[i][0])
+                    else:
+                        print 'Not appending ' + str(inp_pos[i][0])
+            elif cur_str != []:
+                if cur_str[0].lower() in self.edgeomitlist:
+                    del cur_str[0]
+                if cur_str[-1].lower() in self.edgeomitlist:
+                    del cut_str[-1]
+                res_str  = ''
+                for c in cur_str:
+                    res_str += c + ' '
+                ret.append(res_str.strip())
+                cur_str = []
         return ret       
     
     def parse_and_train(self):
@@ -56,7 +72,7 @@ class NaturalLanguageNetwork:
             ins, outs = self.convert_to_tuple(learn_lines[i],learn_lines[i+1])
             i += 2
             self.ds.addSample(ins,outs)
-        self.nn = buildNetwork(self.ios,self.hns,self.ios)
+        self.nn = buildNetwork(self.ios,self.hns,25,self.ios)
         self.train_dat, self.test_dat = self.ds.splitWithProportion(0.75)
         trnr = BackpropTrainer(self.nn,dataset=self.train_dat,momentum=0.1,verbose=False,weightdecay=0.01)
         i = 150

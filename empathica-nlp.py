@@ -63,6 +63,7 @@ class PartOfSpeechHandler(tornado.web.RequestHandler):
                         tagged_input.append((token, 'NAME'))
                 else:
                         tagged_input.append((token, tag))
+        logging.info('TOKENIZE: Returned %s', str(tagged_input))
         self.write(tornado.escape.json_encode(tagged_input))
 
 class ConceptHandler(tornado.web.RequestHandler):
@@ -78,7 +79,9 @@ class ConceptHandler(tornado.web.RequestHandler):
                         tagged_input.append((token, 'NAME'))
                 else:
                         tagged_input.append((token, tag))
+        logging.info('CONCEPT: Parsed %s', str(tagged_input))
         concepts = nln.get_concepts(tagged_input)
+        logging.info('CONCEPT: Returned %s', str(concepts))
         self.write(tornado.escape.json_encode(concepts))
         
 def main():
