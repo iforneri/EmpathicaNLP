@@ -38,7 +38,7 @@ def is_name(word):
         return False
 
 class IsNameHandler(tornado.web.RequestHandler):
-    def get(self):
+    def post(self):
         word = self.get_argument('word')
         logging.info('IS_NAME: Got %s as input', word)
         result = is_name(word)
@@ -50,7 +50,7 @@ class IsNameHandler(tornado.web.RequestHandler):
         self.write(tornado.escape.json_encode(message))
 
 class PartOfSpeechHandler(tornado.web.RequestHandler):
-    def get(self):
+    def post(self):
         logging.info(self.get_argument('input'))
         input = self.get_argument('input')
         logging.info('TOKENIZE: Got %s as input', input)
@@ -65,7 +65,7 @@ class PartOfSpeechHandler(tornado.web.RequestHandler):
         self.write(tornado.escape.json_encode(tagged_input))
 
 class ConceptHandler(tornado.web.RequestHandler):
-    def get(self):
+    def post(self):
         logging.info(self.get_argument('input'))
         tags = self.get_argument('input')
         logging.info('CONCEPT: Got %s as input', input)
@@ -80,9 +80,7 @@ class ConceptHandler(tornado.web.RequestHandler):
         concepts = nln.get_concepts(tagged_input)
         self.write(tornado.escape.json_encode(concepts))
         
-        
 def main():
-    tornado.options.parse_command_line()
     tornado.options.parse_command_line()
     nln.parse_and_train()
     application = tornado.web.Application([
