@@ -22,6 +22,7 @@ import logging
 import nltk
 from nltk.corpus import names
 from nltk.corpus import wordnet
+from nlp_nn import NaturalLanguageNetwork
 
 from tornado.options import define, options
 
