@@ -51,8 +51,9 @@ class NaturalLanguageNetwork:
             elif cur_str != []:
                 if cur_str[0].lower() in self.edgeomitlist:
                     del cur_str[0]
-                if cur_str[-1].lower() in self.edgeomitlist:
-                    del cut_str[-1]
+                if len(cur_str) != 0:
+                    if cur_str[-1].lower() in self.edgeomitlist:
+                        del cut_str[-1]
                 res_str  = ''
                 for c in cur_str:
                     res_str += c + ' '
