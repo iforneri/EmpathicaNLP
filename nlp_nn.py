@@ -29,6 +29,10 @@ class NaturalLanguageNetwork:
         self.edgeomitlist = []
         self.edgeomitlist.append('and')
         self.edgeomitlist.append('of')
+        self.edgeomitlist.append('with')
+        self.trailomitlist = []
+        self.trailomitlist.append('the')
+        self.trailomitlist.append('a')
     
     def get_concepts(self,inp_pos):
         inp = []
@@ -52,8 +56,8 @@ class NaturalLanguageNetwork:
                 if cur_str[0].lower() in self.edgeomitlist:
                     del cur_str[0]
                 if len(cur_str) != 0:
-                    if cur_str[-1].lower() in self.edgeomitlist:
-                        del cut_str[-1]
+                    if cur_str[-1].lower() in self.edgeomitlist or cur_str[-1].lower() in self.trailomitlist:
+                        del cur_str[-1]
                 res_str  = ''
                 for c in cur_str:
                     res_str += c + ' '
@@ -75,7 +79,8 @@ class NaturalLanguageNetwork:
             i += 2
             self.ds.addSample(ins,outs)
         self.nn = buildNetwork(self.ios,self.hns,25,self.ios)
-        self.train_dat, self.test_dat = self.ds.splitWithProportion(0.75)
+        #self.train_dat, self.test_dat = self.ds.splitWithProportion(0.75)
+        self.train_dat = self.ds
         trnr = BackpropTrainer(self.nn,dataset=self.train_dat,momentum=0.1,verbose=False,weightdecay=0.01)
         i = 150
         trnr.trainEpochs(150)
@@ -85,8 +90,8 @@ class NaturalLanguageNetwork:
             print 'For epoch ' + str(i)
             print 'For train:'
             self.print_current_error()
-            print 'For test:'
-            self.print_validation()
+            #print 'For test:'
+            #self.print_validation()
         self.nn.sortModules()
         #trnr.trainEpochs(self.epochs)
         #trnr.trainUntilConvergence()

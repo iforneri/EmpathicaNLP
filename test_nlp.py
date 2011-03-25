@@ -10,7 +10,7 @@ print nln.get_concepts(nltk.pos_tag(nltk.word_tokenize('I have to clean the shee
 
 print nln.get_concepts(nltk.pos_tag(nltk.word_tokenize('My house burned down.')))
 print nln.get_concepts(nltk.pos_tag(nltk.word_tokenize('I lost all my possessions.')))
-print nln.get_concepts(nltk.pos_tag(nltk.word_tokenize('Some of those were familiy heirlooms that I can never replace.')))
+print nln.get_concepts(nltk.pos_tag(nltk.word_tokenize('Some of those were family heirlooms that I can never replace.')))
 
 print nln.get_concepts(nltk.pos_tag(nltk.word_tokenize('My father drinks too much.')))
 print nln.get_concepts(nltk.pos_tag(nltk.word_tokenize('It makes him be a different person and it bothers my mother.')))
